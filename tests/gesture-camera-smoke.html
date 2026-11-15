@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<script src="../module/db-signup.js"></script>
+<pre id="result">RUNNING</pre>
+<script>
+  (async () => {
+    const result = document.getElementById('result');
+    const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+    const check = (condition, message) => { if (!condition) throw new Error(message); };
+    const component = document.createElement('db-signup');
+    const click = selector => {
+      const button = component.shadowRoot.querySelector(selector);
+      check(button, 'Missing control: ' + selector);
+      button.click();
+    };
+    try {
+      localStorage.removeItem('db_signup_state_v1');
+      component.setAttribute('lang', 'en');
+      document.body.insertBefore(component, result);
+      for (let i = 0; i < 40 && !component.shadowRoot.querySelector('#btn-sign'); i++) await wait(100);
+      click('#btn-sign');
+      click('#tab-sign-cam');
+      for (let i = 0; i < 200 && !component.gestureInput && !component.cameraStatus.includes('unavailable'); i++) await wait(100);
+      check(component.gestureInput && component.cameraStream, 'Gesture model did not load: ' + component.cameraStatus);
+      check(component.shadowRoot.querySelector('#camera-video').srcObject === component.cameraStream, 'Camera preview is detached');
+      for (let i = 0; i < 50 && component.cameraStatus === component.dict.ethsl.cameraReady; i++) await wait(100);
+      const video = component.shadowRoot.querySelector('#camera-video');
+      check(component.cameraStatus !== component.dict.ethsl.cameraReady, 'Camera frames were not analyzed; video readyState=' + video.readyState + ', paused=' + video.paused);
+      check(!component.cameraStatus.includes('stopped'), 'Gesture inference failed: ' + component.cameraStatus);
+      component.handleCameraGesture('Pointing_Up');
+      check(component.gestureIndex === 1, 'Next-choice gesture did not move focus');
+      component.handleCameraGesture('Thumb_Up');
+      await wait(100);
+      check(component.state.profile.language === 'en' && component.state.step === 1, 'Selection gesture did not answer language question');
+      check(!component.state.profile.name, 'Camera invented a name');
+      component.handleCameraGesture('Thumb_Up');
+      component.handleCameraGesture('Pointing_Up');
+      component.handleCameraGesture('Thumb_Up');
+      check(component.state.profile.name === 'AB', 'Camera did not spell the selected name letters');
+      check(component.shadowRoot.querySelector('#field-name').value === 'AB', 'Spelled name was not shown in the field');
+      component.handleCameraGesture('Thumb_Down');
+      check(component.state.profile.name === 'A', 'Delete gesture did not correct the name');
+      component.handleCameraGesture('Closed_Fist');
+      check(component.state.step === 2, 'Continue gesture did not advance to the phone question');
+      component.handleCameraGesture('Pointing_Up');
+      check(component.cameraStatus.includes('Focused choice: 1'), 'Camera did not show the focused phone digit');
+      component.handleCameraGesture('Thumb_Up');
+      check(component.state.profile.phone === '1', 'Camera did not enter the selected phone digit');
+      check(component.shadowRoot.querySelector('#field-phone').value === '1', 'Phone digit was not shown in the field');
+      component.handleCameraGesture('Thumb_Down');
+      check(component.state.profile.phone === '', 'Delete gesture did not correct the phone');
+      component.state.profile.phone = '0912345678';
+      component.handleCameraGesture('Closed_Fist');
+      check(component.state.step === 3, 'Camera did not advance to the identity question');
+      component.handleCameraGesture('Pointing_Up');
+      component.handleCameraGesture('Thumb_Up');
+      check(component.state.step === 4 && component.state.profile.idRoute, 'Camera did not answer the identity question');
+      component.handleCameraGesture('Thumb_Up');
+      check(component.state.support.includes('Captions'), 'Camera did not answer the support question');
+      click('#tab-sign-studio');
+      check(!component.cameraStream, 'Camera did not stop');
+      click('#tab-sign-cam');
+      for (let i = 0; i < 100 && !component.cameraStream; i++) await wait(100);
+      check(component.cameraStream, 'Camera did not restart after changing tabs');
+      component.handleCameraGesture('Closed_Fist');
+      check(component.state.completed && !component.cameraStream, 'Camera did not stop after completing registration');
+      result.textContent = 'PASS: model loaded, preview attached, all question controls, camera restart and cleanup';
+    } catch (error) {
+      result.textContent = 'FAIL: ' + error.message;
+    }
+  })();
+</script>

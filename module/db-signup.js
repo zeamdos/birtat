@@ -114,6 +114,17 @@ const TRANSLATIONS = {
     "ethsl": {
       "tabImage": "የምልክት ምስል",
       "tabCamera": "ካሜራ ይጠቀሙ",
+      "cameraLoading": "ካሜራ እና የእጅ ምልክት መለያ በመጀመር ላይ…",
+      "cameraReady": "መልስ ለመምረጥ የእጅ ምልክት ያሳዩ እና ይያዙት።",
+      "cameraFailed": "ካሜራው ወይም የምልክት መለያው አልሰራም። ከታች ያሉትን አዝራሮች ይጠቀሙ።",
+      "gestureFailed": "የምልክት መለያው ቆሟል። ካሜራውን እንደገና ይሞክሩ።",
+      "gestureSeen": "የታወቀ ምልክት: {gesture}",
+      "noHand": "እጅ አልታየም። አንድ እጅ በካሜራው ውስጥ ያሳዩ።",
+      "unclearHand": "እጅ ታይቷል። ከተገለጹት ምልክቶች አንዱን በግልጽ ያሳዩ።",
+      "poseSeen": "{gesture} ({score}%) ታይቷል። ይያዙት ከዚያ ይልቀቁ።",
+      "gestureGuide": "ጠቋሚ ጣት ወደ ላይ፡ ቀጣይ ምርጫ (ተጭነው ለማሸብለል) · ሁለት ጣቶች፡ ቀዳሚ ምርጫ · አውራ ጣት ወደ ላይ፡ ምረጥ · አውራ ጣት ወደ ታች፡ ፊደል/ቁጥር ሰርዝ · ቡጢ፡ ቀጥል። በድርጊቶች መካከል እጅዎን ይልቀቁ። ይህ መቆጣጠሪያ ነው፤ ሙሉ የምልክት ቋንቋ ትርጉም አይደለም።",
+      "focusedChoice": "የተጠቆመ ምርጫ",
+      "nameHint": "በካሜራው የፊደል መምረጫ ስምዎን በላቲን ፊደላት ያስገቡ። SPACE እና DELETE መጨረሻ ላይ ናቸው። መጻፍ ወይም በድምፅ መናገርም ይችላሉ።",
       "speedNormal": "መደበኛ ፍጥነት",
       "speedSlow": "ቀስ ያለ ንግግር",
       "replay": "ድምፅ ድገም",
@@ -246,6 +257,17 @@ const TRANSLATIONS = {
     "ethsl": {
       "tabImage": "Interpreter image",
       "tabCamera": "Use camera",
+      "cameraLoading": "Starting camera and gesture recognition…",
+      "cameraReady": "Show a gesture and hold it to choose an answer.",
+      "cameraFailed": "Camera or gesture recognition is unavailable. Use the buttons below.",
+      "gestureFailed": "Gesture recognition stopped. Try the camera again.",
+      "gestureSeen": "Recognized: {gesture}",
+      "noHand": "No hand detected. Move one hand into the frame.",
+      "unclearHand": "Hand detected. Hold one of the shown poses clearly.",
+      "poseSeen": "Seeing {gesture} ({score}%). Hold, then release.",
+      "gestureGuide": "Point up: next choice (hold to scroll) · Victory: previous · Thumb up: select · Thumb down: delete a letter or digit · Fist: continue. Release your hand between actions. This controls the questionnaire; it does not translate EthSL sentences.",
+      "focusedChoice": "Focused choice",
+      "nameHint": "Use the camera letter picker to enter a name in Latin letters. SPACE and DELETE are at the end. You can also type or speak below.",
       "speedNormal": "Normal speech",
       "speedSlow": "Slow speech",
       "replay": "Replay audio",
@@ -710,6 +732,9 @@ class DbSignup extends HTMLElement {
     this.signSlow = false;
     this.cameraActive = false;
     this.cameraStream = null;
+    this.gestureInput = null;
+    this.gestureIndex = 0;
+    this.cameraStatus = '';
     this.signAnimFrame = null;
     this.signAnimStartTime = 0;
     this.errorMsg = '';
@@ -820,6 +845,7 @@ class DbSignup extends HTMLElement {
   }
 
   stopCameraStream() {
+    if (this.gestureInput) this.gestureInput.stop();
     if (this.cameraStream) {
       try {
         this.cameraStream.getTracks().forEach(t => t.stop());
@@ -829,6 +855,78 @@ class DbSignup extends HTMLElement {
     this.signAnimStartTime = 0;
     }
     this.cameraActive = false;
+  }
+
+  attachCameraVideo() {
+    const video = this.shadowRoot.querySelector('#camera-video');
+    if (video && this.cameraStream) {
+      video.srcObject = this.cameraStream;
+      video.play().catch(() => {});
+    }
+  }
+
+  cameraChoices() {
+    const step = ['lang', 'name', 'phone', 'idRoute', 'support'][this.state.step];
+    if (step === 'phone') return '0123456789'.split('');
+    if (step === 'name') return [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'SPACE', 'DELETE'];
+    return this.dict.steps[step].options || [];
+  }
+
+  handleCameraGesture(gesture, error) {
+    const labels = this.dict.ethsl || {};
+    if (error) {
+      this.cameraStatus = labels.gestureFailed || 'Gesture recognition stopped. Try the camera again.';
+      this.render(false);
+      return;
+    }
+    const choices = this.cameraChoices();
+    const step = ['lang', 'name', 'phone', 'idRoute', 'support'][this.state.step];
+    if (gesture === 'Pointing_Up' && choices.length) {
+      this.gestureIndex = (this.gestureIndex + 1) % choices.length;
+    } else if (gesture === 'Victory' && choices.length) {
+      this.gestureIndex = (this.gestureIndex + choices.length - 1) % choices.length;
+    } else if (gesture === 'Thumb_Up' && choices.length) {
+      if (step === 'phone') {
+        if (this.state.profile.phone.length < 14) this.state.profile.phone += choices[this.gestureIndex];
+        this.saveState();
+      } else if (step === 'name') {
+        const key = choices[this.gestureIndex];
+        if (key === 'DELETE') this.state.profile.name = this.state.profile.name.slice(0, -1);
+        else if (this.state.profile.name.length < 80) this.state.profile.name += key === 'SPACE' ? ' ' : key;
+        this.saveState();
+      } else {
+        this.pressKeypad(this.gestureIndex + 1);
+      }
+    } else if (gesture === 'Closed_Fist') {
+      this.nextStep();
+    } else if (gesture === 'Thumb_Down' && (step === 'name' || step === 'phone')) {
+      this.state.profile[step] = this.state.profile[step].slice(0, -1);
+      this.saveState();
+    } else {
+      return;
+    }
+    const currentChoices = this.cameraChoices();
+    if (currentChoices.length) this.gestureIndex %= currentChoices.length;
+    this.cameraStatus = (labels.gestureSeen || 'Recognized: {gesture}').replace('{gesture}', gesture.replace('_', ' '));
+    if (currentChoices.length) this.cameraStatus += ' · ' + (labels.focusedChoice || 'Focused choice') + ': ' + currentChoices[this.gestureIndex];
+    this.render(false);
+    this.vibrate(40);
+  }
+
+  handleCameraObservation(observation) {
+    const labels = this.dict.ethsl || {};
+    let message = labels.noHand || 'No hand detected. Move one hand into the frame.';
+    if (observation.hands && !observation.gesture) {
+      message = labels.unclearHand || 'Hand detected. Hold one of the shown poses clearly.';
+    } else if (observation.gesture) {
+      message = (labels.poseSeen || 'Seeing {gesture} ({score}%). Hold, then release.')
+        .replace('{gesture}', observation.gesture.replace('_', ' '))
+        .replace('{score}', Math.round(observation.score * 100));
+    }
+    if (message === this.cameraStatus) return;
+    this.cameraStatus = message;
+    const status = this.shadowRoot.querySelector('#camera-status');
+    if (status) status.textContent = message;
   }
 
   async loadTranslations(lang) {
@@ -1227,6 +1325,7 @@ class DbSignup extends HTMLElement {
     if (this.state.step < 4) {
       const fromNameStep = (this.state.step === 1);
       this.state.step += 1;
+      this.gestureIndex = 0;
       this.saveState();
       this.dispatchEvent(new CustomEvent('db-signup:step', {
         bubbles: true, composed: true, detail: { step: this.state.step + 1, of: 5 }
@@ -1253,6 +1352,7 @@ class DbSignup extends HTMLElement {
       this.vibrate(40);
       this.errorMsg = '';
       this.state.step -= 1;
+      this.gestureIndex = 0;
       this.saveState();
       this.render(true);
       if (this.keypadMode || this.autoSpeak) {
@@ -1264,6 +1364,7 @@ class DbSignup extends HTMLElement {
   }
 
   finishRegistration() {
+    this.stopCameraStream();
     if (this.state.profile.idRoute === TRANSLATIONS.en.steps.idRoute.options[3] ||
         this.state.profile.idRoute === TRANSLATIONS.am.steps.idRoute.options[3]) {
       this.state.profile.referralCode = 'DB-' + Math.floor(1000 + Math.random() * 9000);
@@ -1336,6 +1437,7 @@ class DbSignup extends HTMLElement {
       '</div>';
 
     this.bindEvents(current);
+    this.attachCameraVideo();
     if (focusHeading) {
       const h2 = this.shadowRoot.querySelector('h2');
       if (h2) h2.focus();
@@ -1414,6 +1516,11 @@ class DbSignup extends HTMLElement {
     const readyText = ethslCfg.ready || 'Ready';
     const handPromptText = ethslCfg.handPrompt || '🖐️ Show signing hand inside frame';
     const stepBadgePrefix = ethslCfg.stepBadge || 'Step';
+    const cameraChoices = this.cameraChoices();
+    const selectedChoice = cameraChoices[this.gestureIndex];
+    const gestureGuide = ethslCfg.gestureGuide || 'Point up: next choice · Victory: previous · Thumb up: select · Fist: continue. Hold each pose, then release.';
+    const nameHint = ethslCfg.nameHint || 'Use the camera letter picker to spell a name with Latin letters, or type below.';
+    const currentStep = ['lang', 'name', 'phone', 'idRoute', 'support'][this.state.step];
 
     const signs = ethslCfg.signs || {};
     const s = signs[current] || signs.lang || {
@@ -1454,10 +1561,15 @@ class DbSignup extends HTMLElement {
           '<div class="hud-prompt">' + handPromptText + '</div>' +
           '</div>' +
           '<div class="hud-recog-bar">' +
-          '<div class="hud-recog-label"><span>' + this.dict.next + '</span></div>' +
-          '<button type="button" class="btn-cam-confirm" id="btn-cam-confirm">' + this.dict.next + ' →</button>' +
+          '<div class="hud-recog-label"><span>' + (selectedChoice || nameHint) + '</span></div>' +
           '</div>' +
           '</div>' +
+          '</div>' +
+          '<div class="camera-gesture-help"><p>' + gestureGuide + '</p>' +
+          '<p id="camera-status" role="status">' + this.cameraStatus + '</p>' +
+          (currentStep === 'name' ? '<p>' + nameHint + '</p>' : '') +
+          '<div class="camera-choice-grid ' + (currentStep === 'name' ? 'camera-letter-grid' : '') + '" aria-label="' + (ethslCfg.focusedChoice || 'Focused choice') + '">' +
+          cameraChoices.map((choice, index) => '<span class="' + (index === this.gestureIndex ? 'focused' : '') + '">' + choice + '</span>').join('') + '</div>' +
           '</div>' +
           '</div>')) +
 
@@ -1958,6 +2070,7 @@ class DbSignup extends HTMLElement {
 
     on('#btn-sign', 'click', () => {
       this.signMode = !this.signMode;
+      if (!this.signMode) this.stopCameraStream();
       try {
         localStorage.setItem('savanna_sign_mode', this.signMode ? '1' : '0');
       } catch (_) {}
@@ -1973,36 +2086,34 @@ class DbSignup extends HTMLElement {
 
     on('#tab-sign-cam', 'click', async () => {
       this.cameraActive = true;
+      this.cameraStatus = (this.dict.ethsl || {}).cameraLoading || 'Starting camera and gesture recognition…';
       this.render(false);
       try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('Camera unavailable');
         const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 320, height: 240 } });
-        this.cameraStream = stream;
-        const video = sr.querySelector('#camera-video');
-        if (video) {
-          video.srcObject = stream;
-          video.play().catch(() => {});
+        if (!this.cameraActive || !this.isConnected) {
+          stream.getTracks().forEach(track => track.stop());
+          return;
         }
-      } catch (_) {}
-    });
-
-    on('#btn-cam-confirm', 'click', () => {
-      this.vibrate([40, 40, 40]);
-      if (current === 'lang') {
-        this.nextStep();
-      } else if (current === 'name') {
-        if (!this.state.profile.name) this.state.profile.name = 'Sign Signed Learner';
-        this.nextStep();
-      } else if (current === 'phone') {
-        if (!this.state.profile.phone) this.state.profile.phone = '+251911223344';
-        this.nextStep();
-      } else if (current === 'idRoute') {
-        if (!this.state.profile.idRoute) this.state.profile.idRoute = this.dict.steps.idRoute.options[0];
-        this.nextStep();
-      } else if (current === 'support') {
-        this.toggleSupport(this.dict.steps.support.options[1]); // EthSL
+        this.cameraStream = stream;
+        this.attachCameraVideo();
+        if (!this.gestureInput) {
+          const { createGestureInput } = await import(SCRIPT_BASE + 'vision/gesture-input.js');
+          this.gestureInput = createGestureInput(
+            () => this.shadowRoot.querySelector('#camera-video'),
+            (gesture, error) => this.handleCameraGesture(gesture, error),
+            observation => this.handleCameraObservation(observation)
+          );
+        }
+        if (!this.cameraActive || !this.isConnected) return;
+        this.gestureInput.start();
+        this.cameraStatus = (this.dict.ethsl || {}).cameraReady || 'Show a gesture and hold it to choose an answer.';
         this.render(false);
-      } else {
-        this.nextStep();
+      } catch (error) {
+        this.stopCameraStream();
+        this.cameraActive = true;
+        this.cameraStatus = (this.dict.ethsl || {}).cameraFailed || 'Camera or gesture recognition is unavailable. Use the buttons below.';
+        this.render(false);
       }
     });
 
@@ -2365,6 +2476,13 @@ class DbSignup extends HTMLElement {
       '}' +
       '.sign-tab.active { background: var(--pri); border-color: var(--pri); color: #ffffff; }' +
       '.studio-stage, .camera-stage { display: flex; justify-content: center; }' +
+      '.camera-stage { flex-direction: column; align-items: center; gap: 1rem; }' +
+      '.camera-gesture-help { width: 100%; max-width: 500px; color: var(--text-main); font-size: 0.95rem; line-height: 1.5; }' +
+      '.camera-gesture-help p { margin: 0 0 0.5rem; }' +
+      '.camera-choice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem; margin-top: 0.75rem; }' +
+      '.camera-letter-grid { grid-template-columns: repeat(7, minmax(0, 1fr)); }' +
+      '.camera-choice-grid span { overflow-wrap: anywhere; border: 1px solid var(--border-card); border-radius: 4px; padding: 0.35rem; text-align: center; }' +
+      '.camera-choice-grid span.focused { background: var(--pri); color: #ffffff; border-color: var(--pri); font-weight: 800; }' +
       '.studio-frame, .camera-frame {' +
       '  position: relative;' +
       '  width: 100%;' +
