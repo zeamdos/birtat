@@ -88,14 +88,14 @@
   "ethsl": {
     "tabImage": "Fakkii Hiikaa",
     "tabCamera": "Kaameraa fayyadamaa",
-    "speedNormal": "Saffisa sirrii",
-    "speedSlow": "Suuta dubbadhu",
     "replay": "Sagalee irra deebi'i",
-    "watermark": "Hiikaa Afaan Mallattoo EthSL",
     "camPreview": "MUL'ATA KAAMERAA",
     "ready": "Qophii",
-    "handPrompt": "🖐️ Harka keessan as keessatti agarsiisaa",
+    "handPrompt": "Harka tokko kaameraa keessatti agarsiisaa",
     "stepBadge": "Sadarkaa",
+    "speedNormal": "Saffisa sirrii",
+    "speedSlow": "Suuta dubbadhu",
+    "watermark": "Qajeelfama Afaan Mallattoo EthSL",
     "signs": {
       "lang": {
         "cue": "Afaan",

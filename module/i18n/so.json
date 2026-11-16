@@ -88,14 +88,14 @@
   "ethsl": {
     "tabImage": "Sawirka Turjubaanka",
     "tabCamera": "Isticmaal Kaamerada",
-    "speedNormal": "Xawaare caadi ah",
-    "speedSlow": "Hadalka gaabso",
     "replay": "Ku celi codka",
-    "watermark": "Turjubaanka Luqadda Dhegoolaha EthSL",
     "camPreview": "MUUQAALKA KAAMERADA",
     "ready": "Diyaar",
-    "handPrompt": "🖐️ Gacantaada ku dhex tus qaab-dhismeedka",
+    "handPrompt": "Hal gacan ku muuji gudaha qaabka",
     "stepBadge": "Tallaabada",
+    "speedNormal": "Xawaare caadi ah",
+    "speedSlow": "Hadalka gaabso",
+    "watermark": "Hagaha Luqadda Calaamadaha EthSL",
     "signs": {
       "lang": {
         "cue": "Luqadda",

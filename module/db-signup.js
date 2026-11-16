@@ -125,14 +125,14 @@ const TRANSLATIONS = {
       "gestureGuide": "ጠቋሚ ጣት ወደ ላይ፡ ቀጣይ ምርጫ (ተጭነው ለማሸብለል) · ሁለት ጣቶች፡ ቀዳሚ ምርጫ · አውራ ጣት ወደ ላይ፡ ምረጥ · አውራ ጣት ወደ ታች፡ ፊደል/ቁጥር ሰርዝ · ቡጢ፡ ቀጥል። በድርጊቶች መካከል እጅዎን ይልቀቁ። ይህ መቆጣጠሪያ ነው፤ ሙሉ የምልክት ቋንቋ ትርጉም አይደለም።",
       "focusedChoice": "የተጠቆመ ምርጫ",
       "nameHint": "በካሜራው የፊደል መምረጫ ስምዎን በላቲን ፊደላት ያስገቡ። SPACE እና DELETE መጨረሻ ላይ ናቸው። መጻፍ ወይም በድምፅ መናገርም ይችላሉ።",
-      "speedNormal": "መደበኛ ፍጥነት",
-      "speedSlow": "ቀስ ያለ ንግግር",
       "replay": "ድምፅ ድገም",
-      "watermark": "የEthSL ምልክት ቋንቋ አስተርጓሚ",
       "camPreview": "የካሜራ እይታ",
       "ready": "ዝግጁ",
-      "handPrompt": "🖐️ እጅዎን እዚህ ክልል ውስጥ ያሳዩ",
+      "handPrompt": "አንድ እጅ በካሜራው ክፈፍ ውስጥ ያሳዩ",
       "stepBadge": "ደረጃ",
+      "speedNormal": "መደበኛ ፍጥነት",
+      "speedSlow": "ቀስ ያለ ንግግር",
+      "watermark": "የEthSL ምልክት ቋንቋ መመሪያ",
       "signs": {
         "lang": {
           "cue": "ቋንቋ",
@@ -268,14 +268,14 @@ const TRANSLATIONS = {
       "gestureGuide": "Point up: next choice (hold to scroll) · Victory: previous · Thumb up: select · Thumb down: delete a letter or digit · Fist: continue. Release your hand between actions. This controls the questionnaire; it does not translate EthSL sentences.",
       "focusedChoice": "Focused choice",
       "nameHint": "Use the camera letter picker to enter a name in Latin letters. SPACE and DELETE are at the end. You can also type or speak below.",
-      "speedNormal": "Normal speech",
-      "speedSlow": "Slow speech",
       "replay": "Replay audio",
-      "watermark": "EthSL Certified Interpreter",
       "camPreview": "CAMERA PREVIEW",
       "ready": "Ready",
-      "handPrompt": "🖐️ Show signing hand inside frame",
+      "handPrompt": "Show one hand inside the frame",
       "stepBadge": "Step",
+      "speedNormal": "Normal speech",
+      "speedSlow": "Slow speech",
+      "watermark": "EthSL Sign Guide",
       "signs": {
         "lang": {
           "cue": "Language",
@@ -400,14 +400,14 @@ const TRANSLATIONS = {
     "ethsl": {
       "tabImage": "Fakkii Hiikaa",
       "tabCamera": "Kaameraa fayyadamaa",
-      "speedNormal": "Saffisa sirrii",
-      "speedSlow": "Suuta dubbadhu",
       "replay": "Sagalee irra deebi'i",
-      "watermark": "Hiikaa Afaan Mallattoo EthSL",
       "camPreview": "MUL'ATA KAAMERAA",
       "ready": "Qophii",
-      "handPrompt": "🖐️ Harka keessan as keessatti agarsiisaa",
+      "handPrompt": "Harka tokko kaameraa keessatti agarsiisaa",
       "stepBadge": "Sadarkaa",
+      "speedNormal": "Saffisa sirrii",
+      "speedSlow": "Suuta dubbadhu",
+      "watermark": "Qajeelfama Afaan Mallattoo EthSL",
       "signs": {
         "lang": {
           "cue": "Afaan",
@@ -532,14 +532,14 @@ const TRANSLATIONS = {
     "ethsl": {
       "tabImage": "ምስሊ ተርጓሚ",
       "tabCamera": "ካሜራ ተጠቐሙ",
-      "speedNormal": "ስሩዕ ፍጥነት",
-      "speedSlow": "ቀስ ዝበለ ድምጺ",
       "replay": "ድምጺ ድገም",
-      "watermark": "ናይ EthSL ምልክት ቋንቋ ተርጓሚ",
       "camPreview": "ርእየት ካሜራ",
       "ready": "ድሉው",
-      "handPrompt": "🖐️ ኢድኩም ኣብዚ ክልል ኣርእዩ",
+      "handPrompt": "ሓደ ኢድ ኣብ ውሽጢ ካሜራ ኣርእዩ",
       "stepBadge": "ደረጃ",
+      "speedNormal": "ስሩዕ ፍጥነት",
+      "speedSlow": "ቀስ ዝበለ ድምጺ",
+      "watermark": "ናይ EthSL ምልክት ቋንቋ መምርሒ",
       "signs": {
         "lang": {
           "cue": "ቋንቋ",
@@ -664,14 +664,14 @@ const TRANSLATIONS = {
     "ethsl": {
       "tabImage": "Sawirka Turjubaanka",
       "tabCamera": "Isticmaal Kaamerada",
-      "speedNormal": "Xawaare caadi ah",
-      "speedSlow": "Hadalka gaabso",
       "replay": "Ku celi codka",
-      "watermark": "Turjubaanka Luqadda Dhegoolaha EthSL",
       "camPreview": "MUUQAALKA KAAMERADA",
       "ready": "Diyaar",
-      "handPrompt": "🖐️ Gacantaada ku dhex tus qaab-dhismeedka",
+      "handPrompt": "Hal gacan ku muuji gudaha qaabka",
       "stepBadge": "Tallaabada",
+      "speedNormal": "Xawaare caadi ah",
+      "speedSlow": "Hadalka gaabso",
+      "watermark": "Hagaha Luqadda Calaamadaha EthSL",
       "signs": {
         "lang": {
           "cue": "Luqadda",
@@ -831,6 +831,11 @@ class DbSignup extends HTMLElement {
     }, 0);
     this.applyVision(this.visionMode);
     this.render(true);
+    if (this.signMode) {
+      setTimeout(() => {
+        if (this.isConnected && this.signMode) this.readCurrentStep();
+      }, 150);
+    }
   }
 
   disconnectedCallback() {
@@ -851,8 +856,6 @@ class DbSignup extends HTMLElement {
         this.cameraStream.getTracks().forEach(t => t.stop());
       } catch (_) {}
       this.cameraStream = null;
-    this.signAnimFrame = null;
-    this.signAnimStartTime = 0;
     }
     this.cameraActive = false;
   }
@@ -1316,7 +1319,7 @@ class DbSignup extends HTMLElement {
       this.render(false);
       const inp = this.shadowRoot.querySelector('input');
       if (inp) inp.focus();
-      if (this.autoSpeak && this.errorMsg) {
+      if ((this.autoSpeak || this.signMode) && this.errorMsg) {
         this.speak(this.errorMsg);
       }
       return;
@@ -1337,9 +1340,9 @@ class DbSignup extends HTMLElement {
         this.justEnteredName = false;
       }
       this.render(true);
-      if (this.keypadMode || this.autoSpeak) {
+      if (this.keypadMode || this.autoSpeak || this.signMode) {
         setTimeout(() => {
-          if (this.keypadMode || this.autoSpeak) this.readCurrentStep();
+          if (this.keypadMode || this.autoSpeak || this.signMode) this.readCurrentStep();
         }, 150);
       }
     } else {
@@ -1355,9 +1358,9 @@ class DbSignup extends HTMLElement {
       this.gestureIndex = 0;
       this.saveState();
       this.render(true);
-      if (this.keypadMode || this.autoSpeak) {
+      if (this.keypadMode || this.autoSpeak || this.signMode) {
         setTimeout(() => {
-          if (this.keypadMode || this.autoSpeak) this.readCurrentStep();
+          if (this.keypadMode || this.autoSpeak || this.signMode) this.readCurrentStep();
         }, 150);
       }
     }
@@ -1432,11 +1435,13 @@ class DbSignup extends HTMLElement {
       '<div class="signup-card vision-' + this.visionMode + '" data-vision="' + this.visionMode + '" role="region" aria-label="' + this.dict.title + '">' +
       this.renderToolbar() +
       '<div id="audio-status" class="audio-notice" role="status" style="display:none;"></div>' +
-      (!navigator.onLine ? '<div class="offline-pill" role="status"><span>📡 ' + this.dict.offlineBanner + '</span></div>' : '') +
+      (!navigator.onLine ? '<div class="offline-pill" role="status"><span>' + this.dict.offlineBanner + '</span></div>' : '') +
       ((this.state.completed && !isEdit) ? this.renderDone() : this.renderStep(current, progressText)) +
       '</div>';
 
     this.bindEvents(current);
+    if (this.signMode && !this.cameraActive) this.startSignAnimation(current);
+    else this.stopSignAnimation();
     this.attachCameraVideo();
     if (focusHeading) {
       const h2 = this.shadowRoot.querySelector('h2');
@@ -1511,10 +1516,10 @@ class DbSignup extends HTMLElement {
     const tabCameraText = ethslCfg.tabCamera || (this.state.profile.language === 'am' ? 'ካሜራ ይጠቀሙ' : 'Use camera');
     const speedText = isSlow ? (ethslCfg.speedNormal || '1.0x Normal') : (ethslCfg.speedSlow || '0.5x Slow');
     const replayText = ethslCfg.replay || (this.state.profile.language === 'am' ? 'ምልክቱን ድገም' : 'Replay Sign');
-    const watermarkText = ethslCfg.watermark || 'EthSL Live Interpreter';
+    const watermarkText = ethslCfg.watermark || 'EthSL Sign Guide';
     const camPreviewText = ethslCfg.camPreview || 'CAMERA PREVIEW';
     const readyText = ethslCfg.ready || 'Ready';
-    const handPromptText = ethslCfg.handPrompt || '🖐️ Show signing hand inside frame';
+    const handPromptText = ethslCfg.handPrompt || 'Show signing hand inside frame';
     const stepBadgePrefix = ethslCfg.stepBadge || 'Step';
     const cameraChoices = this.cameraChoices();
     const selectedChoice = cameraChoices[this.gestureIndex];
@@ -1532,12 +1537,12 @@ class DbSignup extends HTMLElement {
     return '<div class="sign-window" role="region" aria-label="EthSL Sign Language Studio & Camera">' +
       '<div class="sign-window-header">' +
       '<div class="sign-mode-tabs">' +
-      '<button type="button" class="sign-tab ' + (!this.cameraActive ? 'active' : '') + '" id="tab-sign-studio">🖐️ ' + tabImageText + '</button>' +
-      '<button type="button" class="sign-tab ' + (this.cameraActive ? 'active' : '') + '" id="tab-sign-cam">📷 ' + tabCameraText + '</button>' +
+      '<button type="button" class="sign-tab ' + (!this.cameraActive ? 'active' : '') + '" id="tab-sign-studio">' + tabImageText + '</button>' +
+      '<button type="button" class="sign-tab ' + (this.cameraActive ? 'active' : '') + '" id="tab-sign-cam">' + tabCameraText + '</button>' +
       '</div>' +
       '<div class="sign-controls">' +
-      '<button type="button" class="btn-sign-tool" id="btn-sign-speed">⚡ ' + speedText + '</button>' +
-      '<button type="button" class="btn-sign-tool" id="btn-sign-replay">↺ ' + replayText + '</button>' +
+      '<button type="button" class="btn-sign-tool" id="btn-sign-speed">' + speedText + '</button>' +
+      '<button type="button" class="btn-sign-tool" id="btn-sign-replay">' + replayText + '</button>' +
       '</div>' +
       '</div>' +
 
@@ -1575,7 +1580,7 @@ class DbSignup extends HTMLElement {
 
       '<div class="sign-caption-box">' +
       '<div class="sign-caption-meta">' +
-      '<span class="caption-cue-badge">🖐️ ' + s.cue + '</span>' +
+      '<span class="caption-cue-badge">' + s.cue + '</span>' +
       '<span class="caption-step-badge">' + stepBadgePrefix + ': ' + (this.state.step + 1) + ' / 5</span>' +
       '</div>' +
       '<div class="sign-caption-title">' + s.title + '</div>' +
@@ -1648,7 +1653,7 @@ class DbSignup extends HTMLElement {
         ctx.moveTo(11 * sign, -4); ctx.lineTo(16 * sign, -17);
         ctx.stroke();
       } else if (type === 'phone') {
-        // 🤙 Phone hand
+        // Phone hand
         ctx.beginPath();
         ctx.moveTo(-6 * sign, -4); ctx.lineTo(-18 * sign, -18);
         ctx.moveTo(8 * sign, 6); ctx.lineTo(20 * sign, 18);
@@ -1811,7 +1816,7 @@ class DbSignup extends HTMLElement {
         // "Phone number?"
         const loop = elapsed % 4.0;
         if (loop < 2.0) {
-          // Hand to ear 🤙
+          // Hand to ear
           rElbowX = 390; rElbowY = 250 + bob;
           rHandX = 345; rHandY = 150 + bob;
           rType = 'phone'; rAng = -0.8;
@@ -1904,7 +1909,7 @@ class DbSignup extends HTMLElement {
         en: { greeting: (name) => 'Okay, ' + name + '!' }
       };
       const gObj = GREETINGS[this.state.profile.language || 'am'] || GREETINGS.am;
-      friendlyPill = '<div class="friendly-pill" role="status"><span>👋 ' + gObj.greeting(rawName) + '</span></div>';
+      friendlyPill = '<div class="friendly-pill" role="status"><span>' + gObj.greeting(rawName) + '</span></div>';
     }
 
     if (s.options) {
@@ -1926,7 +1931,7 @@ class DbSignup extends HTMLElement {
           '</button>';
       });
       body += '</div>';
-      if (s.note) body += '<p class="privacy-note">🔒 ' + s.note + '</p>';
+      if (s.note) body += '<p class="privacy-note">' + s.note + '</p>';
       if (current === 'support') {
         const hintText = this.dict.supportToggleHint || (this.state.profile.language === 'am' ? 'ለመምረጥ/ለመሰረዝ ይጫኑ። ሲጨርሱ "ቀጥል"ን ወይም በቁጥር 9ን ይጫኑ።' : 'Tap to toggle choices. When done, press "Continue" or press 9 on keypad.');
         body += '<p class="hint-text">' + hintText + '</p>';
@@ -1943,7 +1948,7 @@ class DbSignup extends HTMLElement {
         '<button type="button" id="btn-speak" class="action-btn" title="' + this.dict.speak + '">' + ICONS.mic + '</button>' +
         '</div>' +
         '<div id="voice-note-msg" class="hint-text" style="margin-top:.4rem; color:var(--accent);"></div>' +
-        (this.isRecording ? '<p class="listening-indicator" role="status">🔴 ' + this.dict.listening + '</p>' : '') +
+        (this.isRecording ? '<p class="listening-indicator" role="status">' + this.dict.listening + '</p>' : '') +
         (current === 'name' && this.state.voiceNotes && this.state.voiceNotes.length ? '<p role="status" style="color:var(--pri); font-weight:700; margin-top:.4rem;">' + ICONS.chk + ' ' + s.voiceSaved + '</p>' : '') +
         '</div>';
     }
@@ -1999,7 +2004,7 @@ class DbSignup extends HTMLElement {
         year: 'numeric'
       }).format(new Date());
     } catch (_) {}
-    const dateHtml = ethiopianDate ? '<p><small>📅 ' + ethiopianDate + '</small></p>' : '';
+    const dateHtml = ethiopianDate ? '<p><small>' + ethiopianDate + '</small></p>' : '';
 
     const supportList = this.state.support && this.state.support.length
       ? '<div class="support-summary"><strong>' + (p.language === 'am' ? 'የተመረጡ የድጋፍ አገልግሎቶች:' : 'Saved Support Accommodations:') + '</strong><ul>' +
@@ -2076,11 +2081,15 @@ class DbSignup extends HTMLElement {
       } catch (_) {}
       this.vibrate(40);
       this.render(false);
+      if (this.signMode) {
+        setTimeout(() => {
+          if (this.isConnected && this.signMode) this.readCurrentStep();
+        }, 150);
+      }
     });
 
     on('#tab-sign-studio', 'click', () => {
       this.stopCameraStream();
-    this.stopSignAnimation();
       this.render(false);
     });
 
@@ -2359,7 +2368,6 @@ class DbSignup extends HTMLElement {
       '  cursor: pointer;' +
       '  white-space: nowrap;' +
       '}' +
-      '.tool-btn:hover { border-color: var(--border-focus); }' +
       '.tool-btn.active { background: var(--pri); border-color: var(--pri); color: #ffffff; }' +
       '.tool-btn.active svg { stroke: #ffffff; }' +
 
@@ -2388,7 +2396,6 @@ class DbSignup extends HTMLElement {
       '  text-align: start;' +
       '  cursor: pointer;' +
       '}' +
-      '.option-btn:hover { border-color: var(--border-focus); }' +
       '.option-btn.selected { background: var(--selected-bg); border: 1.5px solid var(--selected-bg); color: var(--selected-text); }' +
       '.key-badge {' +
       '  flex: 0 0 2rem;' +
@@ -2447,7 +2454,6 @@ class DbSignup extends HTMLElement {
       '  align-items: center;' +
       '  justify-content: center;' +
       '}' +
-      '.action-btn:hover { border-color: var(--border-focus); }' +
       '.listening-indicator { font-size: 0.92rem; font-weight: 700; color: #dc2626; margin-top: 0.5rem; }' +
       '.error { color: var(--error); font-size: 0.92rem; font-weight: 700; min-height: 1.4rem; margin: 0.45rem 0 1rem; text-align: start; }' +
       '.error:empty { display: none; }' +
@@ -2488,7 +2494,7 @@ class DbSignup extends HTMLElement {
       '  width: 100%;' +
       '  max-width: 540px;' +
       '  height: 340px;' +
-      '  background: #020617;' +
+      '  background: var(--bg-alt, #f9fafb);' +
       '  border: 2px solid var(--border-card);' +
       '  border-radius: 10px;' +
       '  overflow: hidden;' +
@@ -2512,8 +2518,7 @@ class DbSignup extends HTMLElement {
       '  gap: 0.4rem;' +
       '  z-index: 10;' +
       '}' +
-      '.live-dot { color: #ef4444; font-size: 0.9rem; animation: pulse-live 1.2s infinite; }' +
-      '@keyframes pulse-live { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.85); } }' +
+      '.live-dot { color: #ef4444; font-size: 0.9rem; }' +
       '.studio-speed-badge {' +
       '  position: absolute;' +
       '  top: 10px;' +
@@ -2568,7 +2573,6 @@ class DbSignup extends HTMLElement {
       '}' +
       '.sign-caption-box { margin-top: 1.15rem; background: var(--bg-alt, #f9fafb); border: 1.5px solid var(--border-card); border-radius: 8px; padding: 0.95rem 1.15rem; text-align: start; }' +
       '.sign-caption-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem; }' +
-      '.caption-cue-badge { background: var(--pri); color: #ffffff; padding: 0.25rem 0.65rem; border-radius: 4px; font-size: 0.82rem; font-weight: 800; }' +
       '.caption-step-badge { color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; }' +
       '.sign-caption-title { font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.35rem; }' +
       '.sign-caption-desc { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }' +
@@ -2587,7 +2591,6 @@ class DbSignup extends HTMLElement {
       '  border-radius: 8px;' +
       '  cursor: pointer;' +
       '}' +
-      '.pad-num:hover { border-color: var(--border-focus); }' +
       '.pad-func { color: var(--pri); font-size: 1.4rem; }' +
       '.keypad-hint { font-size: 0.88rem; font-weight: 600; color: var(--text-muted); margin: 0.85rem 0 0; text-align: center; }' +
 
@@ -2609,7 +2612,6 @@ class DbSignup extends HTMLElement {
       '  gap: 0.5rem;' +
       '  letter-spacing: -0.01em;' +
       '}' +
-      '.btn-primary:hover { opacity: 0.92; }' +
       '.btn-secondary {' +
       '  min-height: 52px;' +
       '  background: #ffffff;' +
@@ -2625,7 +2627,6 @@ class DbSignup extends HTMLElement {
       '  align-items: center;' +
       '  gap: 0.45rem;' +
       '}' +
-      '.btn-secondary:hover { border-color: var(--border-focus); }' +
       '.pass-box { padding: 1.25rem; border: 1.5px solid var(--border-card); border-radius: 8px; margin: 1.25rem 0; font-size: 1.15rem; background: #f9fafb; }' +
       '.support-summary { margin: 1.25rem 0; text-align: start; background: #f9fafb; border: 1.5px solid var(--border-card); border-radius: 8px; padding: 1rem 1.25rem; }' +
       '.support-summary ul { margin: 0.5rem 0 0 1.25rem; padding: 0; }' +

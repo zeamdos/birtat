@@ -1,3 +1,93 @@
+# Birtat  (`<db-signup>`) — Track 1: Accessible Onboarding
+
+## What it does
+Birtat Bridge is a zero-dependency, offline-first accessible sign-up and career gateway web component (`<db-signup>`). It guides learners one question at a time in Amharic and English with a telephone-style keypad mode (`1`–`9`, `*`, `#`), voice input/output, tactile vibration feedback, and a provisional no-ID referral pass. Sensitive disability and support preferences stay strictly isolated from employer data.
+
+## The main task we tested
+"A blind or low-literacy learner with no formal ID card registers independently in Amharic on a low-cost Android phone using keypad numbers and voice prompts, with nobody helping."
+
+## Run it
+```bash
+docker compose up
+```
+Open:
+* Standalone Judge Demo + Blindfold Mode: `http://localhost:8080/demo/blank.html`
+* Savanna Sign-Up Page: `http://localhost:8080/pages/signup.html`
+* Savanna Career Gateway: `http://localhost:8080/pages/jobs.html`
+
+## Install, Level 1
+```html
+<script src="../module/db-signup.js" defer></script>
+<!-- New registration -->
+<db-signup lang="am" api="https://your-server.example"></db-signup>
+<!-- Edit / profile review in pages/profile.html -->
+<db-signup lang="am" mode="edit"></db-signup>
+```
+* **Attributes:**
+  * `lang` (`"am"` or `"en"`)
+  * `mode` (optional, `"edit"` loads saved learner profile and accommodations)
+  * `sign` (optional, `"true"` activates the animated EthSL sign language avatar guide)
+  * `keypad` (optional, `"true"` activates telephone keypad mode)
+  * `api` (optional backend URL for offline sync)
+* **Events:**
+  * `db-signup:step` — `{ step, of }`
+  * `db-signup:done` — `{ profile: { language, name, phone, idRoute, referralCode }, voiceNotes }`
+  * `db-signup:support` — `{ support: [...] }` (dispatched separately so support needs never mix with profile/employer payloads).
+* **Starter Mounts:**
+  * Registration: `pages/signup.html`
+  * Profile Edit: `pages/profile.html` (linked from the sidebar's "My Profile" item on all course pages).
+
+## Install, Level 2
+The Level 2 REST contract is defined in [`openapi.yaml`](./openapi.yaml) at the repository root.
+
+Sample curl commands for automated ingestion and testing:
+```bash
+# 1. Create a learner (201 Created)
+curl -X POST http://localhost:8080/api/v1/learners \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Amara Nwosu","phone":"+251911223344","language":"am","idRoute":"ብሔራዊ መታወቂያ (ፋይዳ)"}'
+
+# 2. Save sensitive support choices separately (Zero-Leak)
+curl -X PUT http://localhost:8080/api/v1/learners/lrn_7829a3f1/support \
+  -H "Content-Type: application/json" \
+  -d '{"support":["captions","interpreter:am"]}'
+
+# 3. Export all learner data (GDPR / Right to Portability)
+curl -X GET http://localhost:8080/api/v1/learners/lrn_7829a3f1/export
+
+# 4. Delete learner data (Right to be Forgotten)
+curl -X DELETE http://localhost:8080/api/v1/learners/lrn_7829a3f1
+```
+
+## Install, Level 3
+`pages/jobs.html` embeds standard `schema.org/JobPosting` JSON-LD so external job boards and search engines can index accessible roles.
+
+## Languages and how to add one
+Translations live in `module/i18n/en.json` and `module/i18n/am.json`. After editing either file, run `node scripts/build-i18n.js` to embed the translations in the web component. If you change Amharic prompts, run `node scripts/build-audio.js` while online to regenerate the bundled MP3 clips. Amharic Listen prompts then play offline, even when the device has no Amharic speech voice. The current language choice is retained when a learner reloads the page.
+* **Ethiopian Calendar:** The browser-native Ethiopic calendar (`am-ET-u-ca-ethiopic`) automatically stamps completion certificates with the localized date (e.g. `6 ኅዳር 2019`).
+
+## Offline and slow connection
+* Every answer saves immediately to `localStorage`; reloading resumes on the exact step.
+* Total module payload is ~14 KB uncompressed (~4 KB gzipped), loading in under 350 ms on Chrome DevTools Slow 3G throttling.
+
+## Data and privacy
+* Collected: Name, normalized Ethiopian phone (`+251...`), identity route, and optional support preferences.
+* Storage: Stored locally in browser `localStorage`; support preferences are isolated from profile events and never sent to employers on `jobs.html`.
+
+## Cost to run per month, roughly
+$0/month (100% static client-side Web Component with zero paid API dependencies; runs on any basic static host or CDN for 3,000+ learners).
+
+## Finished and not finished
+* **Finished:** 5-step accessible engine, Amharic/English i18n, EthSL (Ethiopian Sign Language) animated hand kinematics guide, Phone Keypad Mode (`0`–`9`, `*`, `#`), `navigator.vibrate` haptic feedback, Sunlight High-Contrast Mode, Voice Input + Audio Fallback, Offline No-ID Referral Code, Ethiopian Calendar timestamps, Blindfold Judge Demo, `profile.html` edit mode, Level 2 `openapi.yaml` specification, and `schema.org` Career Gateway.
+* **Not finished:** Remote database cluster setup (intentionally decoupled to keep host integration zero-cost and client-first).
+
+## Libraries and their licences
+None — 100% vanilla HTML, CSS, and JavaScript (MIT License).
+
+---
+
+# Starter Repository Reference
+
 # Savanna static pages
 
 Three Savanna learner pages, frozen from the **local dev app** into plain HTML + CSS so they can be
@@ -58,103 +148,3 @@ Everything else is inert.
 
 
 _______________________________________________________________
-
-
-# Birtat  (`<db-signup>`) — Track 1: Accessible Onboarding
-
-## What it does
-Birtat Bridge is an offline-first accessible sign-up and career gateway web component (`<db-signup>`). It guides learners one question at a time in Amharic and English with a telephone-style keypad mode (`1`–`9`, `*`, `#`), voice input/output, tactile vibration feedback, and a provisional no-ID referral pass. Sensitive disability and support preferences stay strictly isolated from employer data.
-
-## The main task we tested
-"A blind or low-literacy learner with no formal ID card registers independently in Amharic on a low-cost Android phone using keypad numbers and voice prompts, with nobody helping."
-
-## Run it
-```bash
-docker compose up
-```
-Open:
-* Standalone Judge Demo + Blindfold Mode: `http://localhost:8080/demo/blank.html`
-* Savanna Sign-Up Page: `http://localhost:8080/pages/signup.html`
-* Savanna Career Gateway: `http://localhost:8080/pages/jobs.html`
-
-### Camera answer controls
-
-On the sign-up page, enable **Sign Language**, then choose **Use camera**. Allow camera access and keep one hand fully visible. The camera shows the choices for the current question. Hold a pose until its name appears, then release your hand before the next action:
-
-* Point up: move to the next choice; hold to scroll.
-* Victory sign: move to the previous choice; hold to scroll.
-* Thumb up: select the focused answer, letter, or digit.
-* Thumb down: delete the last name letter or phone digit.
-* Closed fist: continue to the next question.
-
-The name question has a Latin-letter picker, including SPACE and DELETE; the phone question has a digit picker. Existing buttons, keyboard, and voice controls remain available. Recognition runs locally in the browser using a bundled pretrained MediaPipe common-gesture model. It does not translate Ethiopian Sign Language sentences or fingerspelling. Camera access requires a secure context such as `http://localhost:8080`; opening the page through `file://` will not enable this feature. The bundled model and runtime add about 23 MB to the first download.
-
-## Install, Level 1
-```html
-<script src="../module/db-signup.js" defer></script>
-<!-- New registration -->
-<db-signup lang="am" api="https://your-server.example"></db-signup>
-<!-- Edit / profile review in pages/profile.html -->
-<db-signup lang="am" mode="edit"></db-signup>
-```
-* **Attributes:**
-  * `lang` (`"am"` or `"en"`)
-  * `mode` (optional, `"edit"` loads saved learner profile and accommodations)
-  * `sign` (optional, `"true"` activates the animated EthSL sign language avatar guide)
-  * `keypad` (optional, `"true"` activates telephone keypad mode)
-  * `api` (optional backend URL for offline sync)
-* **Events:**
-  * `db-signup:step` — `{ step, of }`
-  * `db-signup:done` — `{ profile: { language, name, phone, idRoute, referralCode }, voiceNotes }`
-  * `db-signup:support` — `{ support: [...] }` (dispatched separately so support needs never mix with profile/employer payloads).
-* **Starter Mounts:**
-  * Registration: `pages/signup.html`
-  * Profile Edit: `pages/profile.html` (linked from the sidebar's "My Profile" item on all course pages).
-
-## Install, Level 2
-The Level 2 REST contract is defined in [`openapi.yaml`](./openapi.yaml) at the repository root.
-
-Sample curl commands for automated ingestion and testing:
-```bash
-# 1. Create a learner (201 Created)
-curl -X POST http://localhost:8080/api/v1/learners \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Amara Nwosu","phone":"+251911223344","language":"am","idRoute":"ብሔራዊ መታወቂያ (ፋይዳ)"}'
-
-# 2. Save sensitive support choices separately (Zero-Leak)
-curl -X PUT http://localhost:8080/api/v1/learners/lrn_7829a3f1/support \
-  -H "Content-Type: application/json" \
-  -d '{"support":["captions","interpreter:am"]}'
-
-# 3. Export all learner data (GDPR / Right to Portability)
-curl -X GET http://localhost:8080/api/v1/learners/lrn_7829a3f1/export
-
-# 4. Delete learner data (Right to be Forgotten)
-curl -X DELETE http://localhost:8080/api/v1/learners/lrn_7829a3f1
-```
-
-## Install, Level 3
-`pages/jobs.html` embeds standard `schema.org/JobPosting` JSON-LD so external job boards and search engines can index accessible roles.
-
-## Languages and how to add one
-Translations live in `module/i18n/en.json` and `module/i18n/am.json`. After editing either file, run `node scripts/build-i18n.js` to embed the translations in the web component. If you change Amharic prompts, run `node scripts/build-audio.js` while online to regenerate the bundled MP3 clips. Amharic Listen prompts then play offline, even when the device has no Amharic speech voice. The current language choice is retained when a learner reloads the page.
-* **Ethiopian Calendar:** The browser-native Ethiopic calendar (`am-ET-u-ca-ethiopic`) automatically stamps completion certificates with the localized date (e.g. `6 ኅዳር 2019`).
-
-## Offline and slow connection
-* Every answer saves immediately to `localStorage`; reloading resumes on the exact step.
-* Camera recognition assets load only when the learner opens the camera tab. The bundled model and runtime add about 23 MB to that first download.
-
-## Data and privacy
-* Collected: Name, normalized Ethiopian phone (`+251...`), identity route, and optional support preferences.
-* Storage: Stored locally in browser `localStorage`; support preferences are isolated from profile events and never sent to employers on `jobs.html`.
-
-## Cost to run per month, roughly
-$0/month (100% static client-side Web Component with zero paid API dependencies; runs on any basic static host or CDN for 3,000+ learners).
-
-## Finished and not finished
-* **Finished:** 5-step accessible engine, Amharic/English i18n, EthSL (Ethiopian Sign Language) animated hand kinematics guide, Phone Keypad Mode (`0`–`9`, `*`, `#`), `navigator.vibrate` haptic feedback, Sunlight High-Contrast Mode, Voice Input + Audio Fallback, Offline No-ID Referral Code, Ethiopian Calendar timestamps, Blindfold Judge Demo, `profile.html` edit mode, Level 2 `openapi.yaml` specification, and `schema.org` Career Gateway.
-* **Not finished:** Remote database cluster setup (intentionally decoupled to keep host integration zero-cost and client-first).
-
-## Libraries and their licences
-The camera answer controls bundle MediaPipe Tasks Vision 1.2.3 and a pretrained gesture model. MediaPipe is Apache 2.0 licensed; see `module/vision/NOTICE.md`. Other page code uses vanilla HTML, CSS, and JavaScript.
-

@@ -1,57 +1,68 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <script src="../module/db-signup.js"></script>
 </head>
 <body>
-<div id="test-log"></div>
+<div id="result">RUNNING</div>
 <script>
 (async () => {
-  const check = (cond, msg) => { if (!cond) throw new Error(msg); };
-  const log = (msg) => {
-    document.getElementById('test-log').innerHTML += '<p>' + msg + '</p>';
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  const log = document.getElementById('result');
+  const playedAudio = [];
+  window.Audio = class {
+    constructor(src) {
+      this.src = src;
+      this.paused = true;
+      playedAudio.push(this);
+    }
+    play() {
+      this.paused = false;
+      return Promise.resolve();
+    }
+    pause() {
+      this.paused = true;
+    }
   };
 
   try {
-    const comp = document.createElement('db-signup');
-    comp.setAttribute('lang', 'am');
-    comp.setAttribute('sign', 'true');
-    document.body.appendChild(comp);
-    await new Promise(r => setTimeout(r, 120));
+    localStorage.removeItem('db_signup_state_v1');
+    const component = document.createElement('db-signup');
+    component.setAttribute('lang', 'en');
+    component.setAttribute('sign', 'true');
+    document.body.appendChild(component);
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-    // 1. Check canvas is present
-    const canvas = comp.shadowRoot.querySelector('#ethsl-canvas');
-    check(canvas, 'Missing #ethsl-canvas');
-    log('PASS: #ethsl-canvas is rendered in DOM');
+    const canvas = component.shadowRoot.querySelector('#ethsl-canvas');
+    check(canvas, 'Animated interpreter is missing');
+    check(component.signAnimFrame !== null, 'Question animation did not start');
+    check(!component.shadowRoot.querySelector('.ethsl-image'), 'Static reference image is still shown');
+    check(
+      playedAudio.some(audio => audio.src.endsWith('/module/audio/en/lang.mp3')),
+      'Enabling EthSL did not present the current question'
+    );
 
-    // 2. Check static hands strip is GONE as requested
-    const handsStrip = comp.shadowRoot.querySelector('.ethsl-hands-strip');
-    check(!handsStrip, 'Static hands strip must be removed');
-    log('PASS: Static hands strip is completely removed');
+    component.shadowRoot.querySelector('[data-idx="1"]').click();
+    await new Promise(resolve => setTimeout(resolve, 400));
+    check(component.state.step === 1, 'Continue did not advance to the next question');
+    check(component.signAnimFrame !== null, 'Next question animation did not start');
+    check(playedAudio.some(audio => audio.src.endsWith('/module/audio/en/name.mp3')), 'Advancing did not present the next question');
+    check(component.shadowRoot.querySelector('#tab-sign-cam'), 'Camera answer option is missing');
+    const nameInput = component.shadowRoot.querySelector('input');
+    check(nameInput, 'Manual answer input is missing');
+    nameInput.value = 'Sam Test';
+    nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+    component.shadowRoot.querySelector('[type="submit"]').click();
+    component.justEnteredName = false;
+    await new Promise(resolve => setTimeout(resolve, 400));
+    check(component.state.step === 2, 'Manual Continue did not advance from the name question');
+    check(playedAudio.some(audio => audio.src.endsWith('/module/audio/en/phone.mp3')), 'Manual Continue did not present the following question');
 
-    // 3. Check canvas animation loop is active
-    check(comp.signAnimFrame !== null, 'signAnimFrame loop is not active');
-    log('PASS: 60 FPS sign animation frame loop is actively running');
-
-    // 4. Test Step 1 (Name): "What is your name?"
-    comp.state.step = 1;
-    comp.render(false);
-    await new Promise(r => setTimeout(r, 100));
-    check(comp.signAnimFrame !== null, 'Step 1 animation running');
-    log('PASS: Step 1 (Name) active signing loop running (YOU -> NAME -> WHAT?)');
-
-    // 5. Test Step 2 (Phone)
-    comp.state.step = 2;
-    comp.render(false);
-    await new Promise(r => setTimeout(r, 100));
-    check(comp.signAnimFrame !== null, 'Step 2 animation running');
-    log('PASS: Step 2 (Phone) active signing loop running (PHONE -> DIAL)');
-
-    comp.remove();
-    document.getElementById('test-log').innerHTML = '<h1>ALL DOLL TESTS PASSED!</h1>' + document.getElementById('test-log').innerHTML;
-  } catch (err) {
-    document.getElementById('test-log').innerHTML = '<h1>FAILED: ' + err.message + '</h1>' + document.getElementById('test-log').innerHTML;
+    component.remove();
+    log.textContent = 'PASS: animated interpreter, automatic question audio, Continue, camera option, and manual input';
+  } catch (error) {
+    log.textContent = 'FAIL: ' + error.message;
   }
 })();
 </script>

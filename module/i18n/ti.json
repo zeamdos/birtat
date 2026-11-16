@@ -88,14 +88,14 @@
   "ethsl": {
     "tabImage": "ምስሊ ተርጓሚ",
     "tabCamera": "ካሜራ ተጠቐሙ",
-    "speedNormal": "ስሩዕ ፍጥነት",
-    "speedSlow": "ቀስ ዝበለ ድምጺ",
     "replay": "ድምጺ ድገም",
-    "watermark": "ናይ EthSL ምልክት ቋንቋ ተርጓሚ",
     "camPreview": "ርእየት ካሜራ",
     "ready": "ድሉው",
-    "handPrompt": "🖐️ ኢድኩም ኣብዚ ክልል ኣርእዩ",
+    "handPrompt": "ሓደ ኢድ ኣብ ውሽጢ ካሜራ ኣርእዩ",
     "stepBadge": "ደረጃ",
+    "speedNormal": "ስሩዕ ፍጥነት",
+    "speedSlow": "ቀስ ዝበለ ድምጺ",
+    "watermark": "ናይ EthSL ምልክት ቋንቋ መምርሒ",
     "signs": {
       "lang": {
         "cue": "ቋንቋ",

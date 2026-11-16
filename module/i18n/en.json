@@ -99,14 +99,14 @@
     "gestureGuide": "Point up: next choice (hold to scroll) · Victory: previous · Thumb up: select · Thumb down: delete a letter or digit · Fist: continue. Release your hand between actions. This controls the questionnaire; it does not translate EthSL sentences.",
     "focusedChoice": "Focused choice",
     "nameHint": "Use the camera letter picker to enter a name in Latin letters. SPACE and DELETE are at the end. You can also type or speak below.",
-    "speedNormal": "Normal speech",
-    "speedSlow": "Slow speech",
     "replay": "Replay audio",
-    "watermark": "EthSL Certified Interpreter",
     "camPreview": "CAMERA PREVIEW",
     "ready": "Ready",
-    "handPrompt": "🖐️ Show signing hand inside frame",
+    "handPrompt": "Show one hand inside the frame",
     "stepBadge": "Step",
+    "speedNormal": "Normal speech",
+    "speedSlow": "Slow speech",
+    "watermark": "EthSL Sign Guide",
     "signs": {
       "lang": {
         "cue": "Language",
